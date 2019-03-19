@@ -16,4 +16,11 @@ bundle install
 
 ## Test Suite
 
+### All
+
 `rspec spec/*`
+
+### `after-30-days` script
+
+`rspec spec/after_30_days_test.rb`
+
