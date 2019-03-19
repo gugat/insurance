@@ -52,6 +52,8 @@ RSpec.describe Product, type: :model do
       it 'decreases price by 2 when has many days to sell' do
         product = Product.new('Super Sale', 5, 7)
         expect(product.update_price.price).to eq(5)
+        product = Product.new('Super Sale', 3, 6)
+        expect(product.update_price.price).to eq(4)
       end
       it 'does not decrease price when has less than 0 days to sell' do
         product = Product.new('Super Sale', -1, 0)

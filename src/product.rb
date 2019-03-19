@@ -1,4 +1,5 @@
 require 'active_model'
+require_relative './coverager'
 
 class Product
   include ActiveModel::Model
@@ -17,52 +18,11 @@ class Product
   end
 
   def update_price
-    return self if name == 'Mega Coverage'
-
-    amount = 0
-
-    if name == 'Super Sale'
-      if @sellIn.zero?
-        amount = -2 * 2
-      elsif @sellIn > 0
-        amount = -1 * 2
-      end
-      new_price = @price + amount
-      @price = new_price.negative? ? 0 : new_price
-    elsif name == 'Full Coverage'
-      if @sellIn > 0
-        amount = 1
-      else 
-        amount = 2
-      end
-      new_price = @price + amount
-      @price = new_price >= 50 ? 50 : new_price
-    elsif name == 'Special Full Coverage'
-      if @sellIn <= 0
-        amount = -@price
-      elsif @sellIn.between?(1,5)
-        amount = 3
-      elsif @sellIn.between?(6,10)
-        amount = 2
-      else
-        amount = 1
-      end
-      new_price = @price + amount
-      @price = new_price >= 50 ? 50 : new_price
-    else
-      # 'Low Coverage' or any other Coverage
-      if @sellIn <= 0
-        amount = -2
-      elsif @sellIn > 0
-        amount = -1
-      end
-      new_price = @price + amount
-      @price = new_price <= 0 ? 0 : new_price
-    end
-    # Decrease days to sell
-    @sellIn -= 1
+    Coverager.for(@name).update_price(self)
+    @sellIn -= 1 if @name != 'Mega Coverage'
     self
   end
+
 
 
 end
