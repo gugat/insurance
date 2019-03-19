@@ -13,6 +13,21 @@ class Product
   end
 
   def update_price
-    self if name == 'Mega Coverage'
+    return self if name == 'Mega Coverage'
+
+    if name == 'Low Coverage'
+      amount = 0
+      if @sellIn.zero?
+        amount = -2
+      elsif @sellIn > 0
+        amount = -1
+      end
+      new_price = @price + amount
+      @price = new_price.negative? ? 0 : new_price
+    end
+    # Decrease days to sell
+    @sellIn -= 1
+    self
   end
+
 end
