@@ -50,6 +50,31 @@ RSpec.describe Product, type: :model do
       end
     end
 
+    context 'when the product is Super Sale' do
+      it 'decreases price by 2 when has many days to sell' do
+        product = Product.new('Super Sale', 5, 7)
+        expect(product.update_price.price).to eq(5)
+      end
+      it 'does not decrease price when has less than 0 days to sell' do
+        product = Product.new('Super Sale', -1, 0)
+        expect(product.update_price.price).to eq(0)
+      end
+      context 'when has 0 days to sell' do
+        it 'decreases price by 4 when price can stay positive' do
+          product = Product.new('Super Sale', 0, 4)
+          expect(product.update_price.price).to eq(0)
+          product = Product.new('Super Sale', 0, 5)
+          expect(product.update_price.price).to eq(1)
+        end
+        it 'sets price at 0 when it can not stay positive' do
+          product = Product.new('Super Sale', 0, 1)
+          expect(product.update_price.price).to eq(0)
+          product = Product.new('Super Sale', 0, 3)
+          expect(product.update_price.price).to eq(0)
+        end
+      end
+    end
+
     context 'when the product is Full Coverage' do
       it 'increases price by 1 when has at least one day left to sell' do
         product = Product.new('Full Coverage', 2, 0)
