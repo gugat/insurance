@@ -27,26 +27,24 @@ RSpec.describe Product, type: :model do
       end
     end
 
-    context 'when the product is Low Coverage' do
-      it 'decreases price by 1 when has many days to sell' do
+    context 'when the product is Low Coverage or any other' do
+      it 'decreases price by 1 when has at least one day to sell' do
         product = Product.new('Low Coverage', 5, 7)
         expect(product.update_price.price).to eq(6)
+        product = Product.new('Low Coverage', 1, 7)
+        expect(product.update_price.price).to eq(6)
       end
-      it 'does not decrease price when has less than 0 days to sell' do
-        product = Product.new('Low Coverage', -1, 0)
+      it 'decreases price by 2 when does not have days to sell' do
+        product = Product.new('Low Coverage', -5, 5)
+        expect(product.update_price.price).to eq(3)
+        product = Product.new('Low Coverage', -1, 3)
+        expect(product.update_price.price).to eq(1)
+      end
+      it 'sets price at 0 when it can not stay positive' do
+        product = Product.new('Low Coverage', -13, 2)
         expect(product.update_price.price).to eq(0)
-      end
-      context 'when has 0 days to sell' do
-        it 'decreases price by 2 when price can stay positive' do
-          product = Product.new('Low Coverage', 0, 2)
-          expect(product.update_price.price).to eq(0)
-          product = Product.new('Low Coverage', 0, 3)
-          expect(product.update_price.price).to eq(1)
-        end
-        it 'sets price at 0 when it can not stay positive' do
-          product = Product.new('Low Coverage', 0, 1)
-          expect(product.update_price.price).to eq(0)
-        end
+        product = Product.new('Low Coverage', 0, 2)
+        expect(product.update_price.price).to eq(0)
       end
     end
 
