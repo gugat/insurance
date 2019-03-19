@@ -24,3 +24,9 @@ bundle install
 
 `rspec spec/after_30_days_test.rb`
 
+
+## Docker
+
+`docker build -t insurance-app .`
+`docker run -i -t insurance-app:latest /bin/bash`
+
