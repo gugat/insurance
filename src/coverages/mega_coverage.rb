@@ -1,5 +1,3 @@
 class MegaCoverage
-  def update_price(context)
-    context
-  end
+  def update_price(context) end
 end
