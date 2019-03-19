@@ -32,6 +32,18 @@ class Product
       end
       new_price = @price + amount
       @price = new_price >= 50 ? 50 : new_price
+    elsif name == 'Special Full Coverage'
+      if @sellIn <= 0
+        amount = -@price
+      elsif @sellIn.between?(1,5)
+        amount = 3
+      elsif @sellIn.between?(6,10)
+        amount = 2
+      else
+        amount = 1
+      end
+      new_price = @price + amount
+      @price = new_price >= 50 ? 50 : new_price
     end
     # Decrease days to sell
     @sellIn -= 1

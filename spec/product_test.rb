@@ -68,5 +68,42 @@ RSpec.describe Product, type: :model do
         expect(product.update_price.price).to eq(50)
       end
     end
+
+    context 'when the product is Special Full Coverage' do
+      it 'increases price by 1 when there are more than 10 days to sell' do
+        product = Product.new('Special Full Coverage', 13, 12)
+        expect(product.update_price.price).to eq(13)
+        product = Product.new('Special Full Coverage', 11, 12)
+        expect(product.update_price.price).to eq(13)
+      end
+      it 'increases price by 2 when there are 6 to 10 days to sell' do
+        product = Product.new('Special Full Coverage', 10, 12)
+        expect(product.update_price.price).to eq(14)
+        product = Product.new('Special Full Coverage', 7, 15)
+        expect(product.update_price.price).to eq(17)
+        product = Product.new('Special Full Coverage', 6, 14)
+        expect(product.update_price.price).to eq(16)
+      end
+      it 'increases price by 3 when there are 1 to 5 days to sell' do
+        product = Product.new('Special Full Coverage', 5, 12)
+        expect(product.update_price.price).to eq(15)
+        product = Product.new('Special Full Coverage', 3, 15)
+        expect(product.update_price.price).to eq(18)
+        product = Product.new('Special Full Coverage', 1, 14)
+        expect(product.update_price.price).to eq(17)
+      end
+      it 'keeps the price in 50 when days to sell is positive' do
+        product = Product.new('Special Full Coverage', 1, 49)
+        expect(product.update_price.price).to eq(50)
+        product = Product.new('Special Full Coverage', 7, 49)
+        expect(product.update_price.price).to eq(50)
+      end
+      it 'resets price to zero when days to sell is negative' do
+        product = Product.new('Special Full Coverage', 0, 50)
+        expect(product.update_price.price).to eq(0)
+        product = Product.new('Special Full Coverage', -1, 50)
+        expect(product.update_price.price).to eq(0)
+      end
+    end
   end
 end
