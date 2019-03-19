@@ -13,5 +13,6 @@ class CarInsurance
 
   def updatePrice
     products.map(&:update_price)
+    products
   end
 end

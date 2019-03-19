@@ -20,9 +20,5 @@ class Product
   def update_price
     Coverager.for(@name).update_price(self)
     @sellIn -= 1 if @name != 'Mega Coverage'
-    self
   end
-
-
-
 end
